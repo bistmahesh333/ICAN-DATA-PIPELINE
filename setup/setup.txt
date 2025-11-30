@@ -1,0 +1,52 @@
+# -------------------------------
+# PySpark Setup on Windows - Copy & Run
+# -------------------------------
+
+# 1. SET JAVA ENVIRONMENT
+# Change the path to your installed JDK
+setx JAVA_HOME "C:\Program Files\Java\jdk-17"
+setx PATH "%JAVA_HOME%\bin;%PATH%"
+
+# 2. SET SPARK ENVIRONMENT
+# Change the path to where Spark is installed
+setx SPARK_HOME "C:\Spark\spark-3.5.7-bin-hadoop3"
+setx PATH "%SPARK_HOME%\bin;%PATH%"
+
+# 3. SET HADOOP ENVIRONMENT (Required for Windows)
+# winutils.exe should be placed in C:\hadoop\bin
+setx HADOOP_HOME "C:\hadoop"
+setx PATH "%HADOOP_HOME%\bin;%PATH%"
+
+# 4. CREATE AND ACTIVATE PYTHON VIRTUAL ENVIRONMENT
+# Navigate to your project directory first
+cd D:\Practice\PySpark\ican-data-pipeline
+
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+venv\Scripts\activate
+
+# Upgrade pip inside venv
+python -m pip install --upgrade pip
+
+# Install PySpark in virtual environment
+pip install pyspark
+
+# 5. SET PYSPARK PYTHON VARIABLES
+# This ensures Spark uses the Python from your virtual environment
+# Temporary for this session (PowerShell)
+$env:PYSPARK_PYTHON="D:\Practice\PySpark\ican-data-pipeline\venv\Scripts\python.exe"
+$env:PYSPARK_DRIVER_PYTHON="D:\Practice\PySpark\ican-data-pipeline\venv\Scripts\python.exe"
+
+# Optional: To make permanent, use System Environment Variables
+# PYSPARK_PYTHON="D:\Practice\PySpark\ican-data-pipeline\venv\Scripts\python.exe"
+# PYSPARK_DRIVER_PYTHON=same as above
+
+# 6. RUN YOUR PYSPARK SCRIPT
+python src\main.py
+
+# Notes:
+# - Ignore warnings about SparkUI port or native Hadoop libraries.
+# - If you get error "Cannot run python3", it's because PYSPARK_PYTHON is not set correctly.
+# - Always activate the virtual environment before running PySpark commands.

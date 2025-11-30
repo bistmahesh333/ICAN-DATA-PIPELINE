@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+
+# PySpark / Spark temporary files
+spark-warehouse/
+*.log
+*.class
