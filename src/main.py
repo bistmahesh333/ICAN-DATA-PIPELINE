@@ -22,5 +22,5 @@ df = spark.createDataFrame(data)
 # Show the DataFrame in console
 df.show()
 
-# Stop SparkSession
+# Stop SparkSession in the end
 spark.stop()
