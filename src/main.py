@@ -1,26 +1,44 @@
 # main.py
-
 from pyspark.sql import SparkSession
-from pyspark.sql import Row
 
-# Create a SparkSession
-# setLogLevel("WARN") reduces verbose INFO logs
+# ----------------------------
+# 1. Create Spark session
+# ----------------------------
 spark = SparkSession.builder \
-    .appName("Simple Spark Example") \
+    .appName("Read PostgreSQL tbl_courses") \
+    .config("spark.jars", "C:/Program Files/PostgreSQL/17/postgresql-42.5.6.jar") \
     .getOrCreate()
-spark.sparkContext.setLogLevel("WARN")  # Only WARN & ERROR logs
 
-# Create some simple data
-data = [
-    Row(id=1, message="Hello Spark"),
-    Row(id=2, message="This is working")
-]
+# ----------------------------
+# 2. PostgreSQL connection settings
+# ----------------------------
+jdbc_url = "jdbc:postgresql://localhost:5432/ICAN"  # Database name: ICAN
+jdbc_properties = {
+    "user": "postgres",
+    "password": "password",
+    "driver": "org.postgresql.Driver"
+}
 
-# Create a DataFrame
-df = spark.createDataFrame(data)
+# ----------------------------
+# 3. Table to read (with schema)
+# ----------------------------
+table_name = "studentmgmt.tbl_courses"  # schema.table_name
 
-# Show the DataFrame in console
-df.show()
+# ----------------------------
+# 4. Read data into DataFrame
+# ----------------------------
+df_courses = spark.read.jdbc(
+    url=jdbc_url,
+    table=table_name,
+    properties=jdbc_properties
+)
 
-# Stop SparkSession in the end
+# ----------------------------
+# 5. Show data
+# ----------------------------
+df_courses.show(truncate=False)  # truncate=False shows full text
+
+# ----------------------------
+# 6. Stop Spark session
+# ----------------------------
 spark.stop()
